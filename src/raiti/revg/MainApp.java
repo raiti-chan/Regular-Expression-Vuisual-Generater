@@ -32,6 +32,7 @@ public class MainApp extends Application implements AppVersion {
 		primaryStage.setTitle("Regular Expression Visual Generator Version-"+this.getVersion());
 		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
+		((MainGUIController)loader.getController()).postInit();
 	}
 	
 	
