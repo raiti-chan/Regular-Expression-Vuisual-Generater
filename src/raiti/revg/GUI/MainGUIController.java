@@ -35,7 +35,16 @@ public class MainGUIController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println(MainApp.getInstance().getVersion());
+		
+	}
+	
+	
+	/**
+	 * このコントローラーを使用しているステージを設定します。
+	 * @param stage ステージ
+	 */
+	public void setThisStage(Stage stage){
+		this.thisStage = stage;
 	}
 	
 }
