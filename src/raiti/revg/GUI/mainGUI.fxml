@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
 
 <BorderPane fx:id="mainPanel" prefHeight="700" prefWidth="1200" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="raiti.revg.GUI.MainGUIController">
 	<!-- メニューバー -->
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
-			<menus>
-				<Menu mnemonicParsing="false" text="ファイル">
-					<items>
-						<MenuItem mnemonicParsing="false" text="新規作成"/>
-						<MenuItem mnemonicParsing="false" text="ファイルを開く"/>
-						<SeparatorMenuItem mnemonicParsing="false"/>
-						<MenuItem mnemonicParsing="false" text="保存"/>
-						<MenuItem mnemonicParsing="false" text="名前を付けて保存"/>
-						<SeparatorMenuItem mnemonicParsing="false"/>
-						<MenuItem fx:id="menu_File_Close" mnemonicParsing="false" text="終了"/>
-					</items>
-				</Menu>
-				<Menu mnemonicParsing="false" text="Edit">
-					<items>
-						<MenuItem mnemonicParsing="false" text="Delete"/>
-					</items>
-				</Menu>
-				<Menu mnemonicParsing="false" text="Help">
-					<items>
-						<MenuItem mnemonicParsing="false" text="About"/>
-					</items>
-				</Menu>
-			</menus>
+			<Menu mnemonicParsing="false" text="ファイル">
+				<MenuItem mnemonicParsing="false" text="新規作成" fx:id="menu_File_NewFile"/>
+				<MenuItem mnemonicParsing="false" text="ファイルを開く" fx:id="menu_File_OpenFile"/>
+				<SeparatorMenuItem mnemonicParsing="false"/>
+				<MenuItem mnemonicParsing="false" text="保存" fx:id="menu_File_SaveFile"/>
+				<MenuItem mnemonicParsing="false" text="名前を付けて保存" fx:id="menu_File_SaveNewName"/>
+				<SeparatorMenuItem mnemonicParsing="false"/>
+				<MenuItem mnemonicParsing="false" text="終了" fx:id="menu_File_Exit"/>
+			</Menu>
+			<Menu mnemonicParsing="false" text="編集">
+				<MenuItem mnemonicParsing="false" text="サイズ" fx:id="menu_Edit_Size"/>
+			</Menu>
+			<Menu mnemonicParsing="false" text="ヘルプ">
+				<MenuItem mnemonicParsing="false" text="Regular Expression Visual Generatorについて"
+				          fx:id="menu_Help_About"/>
+			</Menu>
 		</MenuBar>
 	</top>
 	<!-- ツールバー -->
@@ -55,9 +39,7 @@
 	<!-- メインパネル -->
 	<center>
 		<ScrollPane fx:id="center_Panel" BorderPane.alignment="CENTER">
-			<content>
-				<Pane fx:id="editor_Panel" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #000000;"/>
-			</content>
+			<Pane fx:id="editor_Panel" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #000000;"/>
 		</ScrollPane>
 	</center>
 </BorderPane>

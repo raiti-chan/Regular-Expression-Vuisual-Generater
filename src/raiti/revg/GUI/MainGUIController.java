@@ -1,18 +1,12 @@
 package raiti.revg.GUI;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import raiti.revg.MainApp;
-import raiti.revg.api.Version;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,20 +41,31 @@ public class MainGUIController implements Initializable{
 	@FXML
 	private Pane editor_Panel;
 	
-	/**
-	 * Closeボタン
-	 */
+//======================================================================================================メニューアイテム
+	//ファイル
 	@FXML
-	private MenuItem menu_File_Close;
+	private MenuItem menu_File_NewFile;
+	@FXML
+	private MenuItem menu_File_OpenFile;
+	@FXML
+	private MenuItem menu_File_SaveFile;
+	@FXML
+	private MenuItem menu_File_SaveNewName;
+	@FXML
+	private MenuItem menu_File_Exit;
+	//編集
+	@FXML
+	private MenuItem menu_Edit_Size;
+	//ヘルプ
+	@FXML
+	private MenuItem menu_Help_About;
+	
+	
+	
 	
 	@FXML
 	private Pane test_Panel;
 	
-	private Pane d_panel;
-	
-	
-	private double dragAnchorX;
-	private double dragAnchorY;
 	
 	/**
 	 * GUIの初期化時に呼ばれます。
@@ -70,7 +75,7 @@ public class MainGUIController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		menu_File_Close.setOnAction(event -> {this.thisStage.close(); System.exit(0);});
+		menu_File_Exit.setOnAction(event -> {this.thisStage.close(); System.exit(0);});
 		
 	}
 	
