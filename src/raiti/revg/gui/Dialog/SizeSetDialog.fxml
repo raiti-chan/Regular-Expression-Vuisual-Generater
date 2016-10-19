@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import raiti.revg.gui.control.NumberTextField?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0"
+            prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="raiti.revg.gui.Dialog.SizeSetDialogController">
+	<Label layoutX="14.0" layoutY="14.0" text="サイズ">
+		<font>
+			<Font size="19.0"/>
+		</font>
+	</Label>
+	<NumberTextField layoutX="55.0" layoutY="50.0" prefHeight="25.0" prefWidth="231.0" AnchorPane.leftAnchor="55.0"
+	                 AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="50.0" fx:id="X"/>
+	<NumberTextField layoutX="55.0" layoutY="85.0" prefHeight="25.0" prefWidth="231.0" AnchorPane.leftAnchor="55.0"
+	                 AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="85.0" fx:id="Y"/>
+	<Label layoutX="14.0" layoutY="54.0" text="XSize"/>
+	<Label layoutX="14.0" layoutY="89.0" text="YSize"/>
+	<Button layoutX="234.0" layoutY="124.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="OK" fx:id="ok"/>
+	<Button layoutX="171.0" layoutY="124.0" mnemonicParsing="false" text="キャンセル" fx:id="cancel"/>
+</AnchorPane>

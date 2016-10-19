@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane prefHeight="700" prefWidth="1200" xmlns="http://javafx.com/javafx/8.0.112-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="raiti.revg.gui.MainGUIController">
+	<!-- メニューバー -->
+	<top>
+		<MenuBar BorderPane.alignment="CENTER">
+			<Menu mnemonicParsing="false" text="ファイル">
+				<MenuItem fx:id="menu_File_NewFile" mnemonicParsing="false" text="新規作成"/>
+				<MenuItem fx:id="menu_File_OpenFile" mnemonicParsing="false" text="ファイルを開く"/>
+				<SeparatorMenuItem mnemonicParsing="false"/>
+				<MenuItem fx:id="menu_File_SaveFile" mnemonicParsing="false" text="保存"/>
+				<MenuItem fx:id="menu_File_SaveNewName" mnemonicParsing="false" text="名前を付けて保存"/>
+				<SeparatorMenuItem mnemonicParsing="false"/>
+				<MenuItem fx:id="menu_File_Exit" mnemonicParsing="false" text="終了"/>
+			</Menu>
+			<Menu mnemonicParsing="false" text="編集">
+				<MenuItem fx:id="menu_Edit_Size" mnemonicParsing="false" text="サイズ"/>
+			</Menu>
+			<Menu mnemonicParsing="false" text="ヘルプ">
+				<MenuItem fx:id="menu_Help_About" mnemonicParsing="false"
+				          text="Regular Expression Visual Generatorについて"/>
+			</Menu>
+		</MenuBar>
+	</top>
+	<!-- ツールバー -->
+	<left>
+		<ToolBar orientation="VERTICAL" prefWidth="10.0" BorderPane.alignment="CENTER">
+			<cursor>
+				<Cursor fx:constant="DEFAULT"/>
+			</cursor>
+		</ToolBar>
+	</left>
+
+	<!-- メインパネル -->
+	<center>
+		<ScrollPane style="-fx-background: #AAAAAA;" BorderPane.alignment="CENTER">
+			<Pane fx:id="editor_Panel" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #000000;"/>
+			<cursor>
+				<Cursor fx:constant="DEFAULT"/>
+			</cursor>
+		</ScrollPane>
+	</center>
+</BorderPane>

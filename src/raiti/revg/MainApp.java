@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import raiti.revg.GUI.MainGUIController;
+import raiti.revg.gui.MainGUIController;
 import raiti.revg.api.AppVersion;
 import raiti.revg.api.Version;
 
@@ -26,7 +26,7 @@ public class MainApp extends Application implements AppVersion {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		instance = this;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI/mainGUI.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/mainGUI.fxml"));
 		Parent root = loader.load();
 		((MainGUIController)loader.getController()).setThisStage(primaryStage);
 		primaryStage.setTitle("Regular Expression Visual Generator Version-"+this.getVersion());
