@@ -1,18 +1,13 @@
 package raiti.revg.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import raiti.revg.gui.Dialog.SizeSetDialogController;
+import raiti.revg.main.MainFX;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,13 +21,19 @@ public class MainGUIController implements Initializable{
 	/**
 	 * メインウィンドウのステージ
 	 */
-	private Stage thisStage = null;
+	public Stage thisStage = null;
+	
+	/**
+	 * エディターモード
+	 */
+	private MODE EditMode = MODE.NONE;
+	
 	
 	/**
 	 * エディターのパネル
 	 */
 	@FXML
-	private Pane editor_Panel;
+	public Pane editor_Panel;
 	
 //==メニューアイテム====================================================================================================
 	//ファイル
@@ -52,7 +53,10 @@ public class MainGUIController implements Initializable{
 	//ヘルプ
 	@FXML
 	private MenuItem menu_Help_About;
-	
+
+//==ツールバー==========================================================================================================
+	@FXML
+	private Button ADD;
 	
 	
 	/**
@@ -63,6 +67,8 @@ public class MainGUIController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+		MainFX fxs = new MainFX(this);
+		
 		//==メニューアイテム============================================================================================
 			//ファイル
 		menu_File_NewFile.setOnAction(event -> {/*TODO:  新規作成 */});
@@ -71,32 +77,21 @@ public class MainGUIController implements Initializable{
 		menu_File_SaveNewName.setOnAction(event -> {/*TODO: 名前を付けて保存 */});
 		menu_File_Exit.setOnAction(event -> {this.thisStage.close(); System.exit(0);});
 			//編集
-		menu_Edit_Size.setOnAction(event -> {/*TODO: サイズ */
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("Dialog/SizeSetDialog.fxml"));
-				Parent root = loader.load();
-				SizeSetDialogController controller = loader.getController();
-				controller.setXandY((int)this.editor_Panel.getWidth(),(int)this.editor_Panel.getHeight());
-				Scene scene = new Scene(root);
-				Stage stage = new Stage(StageStyle.UTILITY);
-				stage.setScene(scene);
-				stage.initOwner(this.thisStage.getScene().getWindow());
-				stage.initModality(Modality.WINDOW_MODAL);
-				stage.setResizable(false);
-				stage.setTitle("サイズの変更");
-				stage.showAndWait();
-				if(controller.isOk()){
-					this.editor_Panel.setPrefSize(controller.getX(),controller.getY());
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		});
+		menu_Edit_Size.setOnAction(fxs::EditPanelResize);
 			//ヘルプ
 		menu_Help_About.setOnAction(event -> {/*TODO: について */});
 		
+		//==ツールバー==================================================================================================
+		ADD.setOnAction(event -> fxs.setEditMode(MODE.CREATE_NODE));
+		
+		this.editor_Panel.setOnMousePressed(fxs::editor_Panel_MousePressed);
+		
+		this.editor_Panel.setOnMouseDragged(fxs::editor_Panel_MouseDragged);
+		
+		this.editor_Panel.setOnMouseReleased(fxs::editor_Panel_MouseReleased);
+		
 	}
+	
 	
 	/**
 	 * GUIの初期化(Showが呼ばれた直後に呼ばれます。)
@@ -104,6 +99,7 @@ public class MainGUIController implements Initializable{
 	public void postInit(){
 		
 	}
+	
 	
 	
 	/**

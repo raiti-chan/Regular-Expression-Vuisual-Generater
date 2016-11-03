@@ -23,6 +23,11 @@ public class MainApp extends Application implements AppVersion {
 	 */
 	private static MainApp instance;
 	
+	/**
+	 * Startメソッド
+	 * @param primaryStage メインフレームのステージ
+	 * @throws Exception アプリケーション内で何かしらの例外が発生した場合スローされます。
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		instance = this;
@@ -48,6 +53,7 @@ public class MainApp extends Application implements AppVersion {
 	 * このアプリケーションのインスタンスを取得します。
 	 * @return アプリケーションのインスタンス
 	 */
+	@SuppressWarnings("unused")
 	public static MainApp getInstance() {
 		return instance;
 	}

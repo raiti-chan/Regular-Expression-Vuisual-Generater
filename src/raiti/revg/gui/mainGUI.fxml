@@ -10,8 +10,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane prefHeight="700" prefWidth="1200" xmlns="http://javafx.com/javafx/8.0.112-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="raiti.revg.gui.MainGUIController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Font?>
+<BorderPane prefHeight="700" prefWidth="1200" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="raiti.revg.gui.MainGUIController">
 	<!-- メニューバー -->
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
@@ -39,16 +41,21 @@
 			<cursor>
 				<Cursor fx:constant="DEFAULT"/>
 			</cursor>
+			<Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" text="N" fx:id="ADD">
+				<font>
+					<Font size="9.0"/>
+				</font>
+			</Button>
 		</ToolBar>
 	</left>
 
 	<!-- メインパネル -->
 	<center>
 		<ScrollPane style="-fx-background: #AAAAAA;" BorderPane.alignment="CENTER">
-			<Pane fx:id="editor_Panel" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #000000;"/>
 			<cursor>
 				<Cursor fx:constant="DEFAULT"/>
 			</cursor>
+			<Pane fx:id="editor_Panel" prefHeight="900.0" prefWidth="900.0" style="-fx-background-color: #FFFFFF;" />
 		</ScrollPane>
 	</center>
 </BorderPane>
