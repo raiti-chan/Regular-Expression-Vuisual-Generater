@@ -8,8 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -113,7 +115,8 @@ public class MainFX {
 	/**
 	 * 作成中のパネル
 	 */
-	private Pane createPanel = null;
+	private BorderPane createPanel = null;
+	private boolean isDragged = false;
 	
 	/**
 	 * {@link MainGUIController#editor_Panel}が押された場合に処理されます
@@ -122,6 +125,7 @@ public class MainFX {
 	 */
 	public void editor_Panel_MousePressed(MouseEvent event) {
 		editor_Panel_MousePressedPoint.setXandY(event.getX(), event.getY());
+		isDragged = false;
 		switch (this.editMode) {
 			case NONE:
 				break;
@@ -132,7 +136,7 @@ public class MainFX {
 	}
 	
 	private void createMode_EPMP() {
-		Pane ap = new Pane();
+		BorderPane ap = new BorderPane();
 		ap.setLayoutX(editor_Panel_MousePressedPoint.X);
 		ap.setLayoutY(editor_Panel_MousePressedPoint.Y);
 		ap.setStyle("-fx-border-color: #000000; -fx-border-style: dashed");
@@ -146,6 +150,7 @@ public class MainFX {
 	 * @param event 発生したイベント
 	 */
 	public void editor_Panel_MouseDragged(MouseEvent event) {
+		isDragged = true;
 		switch (this.editMode) {
 			case NONE:
 				break;
@@ -192,9 +197,26 @@ public class MainFX {
 			case NONE:
 				break;
 			case CREATE_NODE:
-				createPanel = null;
+				createMode_EPMR(event);
 				break;
 		}
+	}
+	
+	private void createMode_EPMR(MouseEvent event) {
+		if (!isDragged){
+			mainGUIController.editor_Panel.getChildren().removeAll(createPanel);
+			return;
+		}
+		
+		TextField field = new TextField();
+		field.setOnAction(event1 -> {
+			TextField eField = (TextField) event1.getSource();
+			BorderPane borderPane = (BorderPane)eField.getParent();
+			borderPane.setCenter(new Label(eField.getText()));
+		});
+		field.setStyle("-fx-alignment: center;");
+		this.createPanel.setCenter(field);
+		createPanel = null;
 	}
 	//==================================================================================================================
 	
