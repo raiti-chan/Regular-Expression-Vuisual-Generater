@@ -64,7 +64,7 @@ public class MainFX {
 	public void EditPanelResize(ActionEvent event) {
 		try {
 			//FXMLのロード
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/mainGUI.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/Dialog/SizeSetDialog.fxml"));
 			Parent root = loader.load();
 			SizeSetDialogController controller = loader.getController();
 			controller.setXandY((int) mainGUIController.editor_Panel.getWidth(), (int) mainGUIController.editor_Panel.getHeight());
@@ -158,7 +158,6 @@ public class MainFX {
 		setSelectNode((NodeBase) node);
 	}
 	
-
 	
 	/**
 	 * {@link MainGUIController#editor_Panel}上でドラッグされた場合に処理されます
@@ -179,12 +178,21 @@ public class MainFX {
 		
 	}
 	
+	/**
+	 * 作成モードドラッグ処理
+	 *
+	 * @param event Mouseイベント
+	 */
 	private void createMode_EPMD(MouseEvent event) {
 		double difference;
 		//X座標の計算など
 		if ((difference = event.getX() - editor_Panel_MousePressedPoint.X) < 0) {
-			selectNode.setLayoutX(event.getX());
-			selectNode.setPrefWidth(-difference);
+			if (event.getX() < 0) {
+				selectNode.setLayoutX(0);
+			} else {
+				selectNode.setLayoutX(event.getX());
+				selectNode.setPrefWidth(-difference);
+			}
 		} else if (event.getX() <= mainGUIController.editor_Panel.getWidth()) {
 			selectNode.setLayoutX(editor_Panel_MousePressedPoint.X);
 			selectNode.setPrefWidth(difference);
@@ -194,8 +202,12 @@ public class MainFX {
 		
 		//Y座標の計算
 		if ((difference = event.getY() - editor_Panel_MousePressedPoint.Y) < 0) {
-			selectNode.setLayoutY(event.getY());
-			selectNode.setPrefHeight(-difference);
+			if (event.getY() < 0) {
+				selectNode.setLayoutY(0);
+			} else {
+				selectNode.setLayoutY(event.getY());
+				selectNode.setPrefHeight(-difference);
+			}
 		} else if (event.getY() <= mainGUIController.editor_Panel.getHeight()) {
 			selectNode.setLayoutY(editor_Panel_MousePressedPoint.Y);
 			selectNode.setPrefHeight(difference);
@@ -226,7 +238,7 @@ public class MainFX {
 	private void createMode_EPMR(MouseEvent event) {
 		
 		if (!isDragged) {
-			mainGUIController.editor_Panel.getChildren().removeAll(selectNode);
+			mainGUIController.editor_Panel.getChildren().remove(selectNode);
 			return;
 		}
 		selectNode.unSelect();

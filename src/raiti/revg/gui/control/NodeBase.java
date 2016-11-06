@@ -124,30 +124,52 @@ public abstract class NodeBase extends AnchorPane {
 			case TopAndLeft:
 				moveX = this.getBoundsInParent().getMinX() + event.getX() - pressedPoint.X;
 				moveY = this.getBoundsInParent().getMinY() + event.getY() - pressedPoint.Y;
-				this.setLayoutX(pressedPoint.X + moveX);
-				this.setLayoutY(pressedPoint.Y + moveY);
-				this.setPrefWidth(pressedSize.X - moveX);
-				this.setPrefHeight(pressedSize.Y - moveY);
+				if (pressedPoint.X + moveX < 0) this.setLayoutX(0);
+				else {
+					this.setLayoutX(pressedPoint.X + moveX);
+					this.setPrefWidth(pressedSize.X - moveX);
+				}
+				if (pressedPoint.Y + moveY < 0) this.setLayoutY(0);
+				else {
+					this.setLayoutY(pressedPoint.Y + moveY);
+					this.setPrefHeight(pressedSize.Y - moveY);
+				}
+				
+				
 				break;
 			case TopAndRight:
 				moveX = this.getBoundsInParent().getMaxX() + event.getX() - pressedPoint.X;
 				moveY = this.getBoundsInParent().getMinY() + event.getY() - pressedPoint.Y;
-				this.setLayoutY(pressedPoint.Y + moveY);
-				this.setPrefWidth(pressedSize.X + moveX);
-				this.setPrefHeight(pressedSize.Y - moveY);
+				if (this.getBoundsInParent().getMaxX() + event.getX() <= ((Pane) this.getParent()).getWidth())
+					this.setPrefWidth(pressedSize.X + moveX);
+				else this.setPrefWidth(((Pane) this.getParent()).getWidth() - this.getLayoutX());
+				if (pressedPoint.Y + moveY < 0) this.setLayoutY(0);
+				else {
+					this.setLayoutY(pressedPoint.Y + moveY);
+					this.setPrefHeight(pressedSize.Y - moveY);
+				}
 				break;
 			case BottomAndLeft:
 				moveX = this.getBoundsInParent().getMinX() + event.getX() - pressedPoint.X;
 				moveY = this.getBoundsInParent().getMaxY() + event.getY() - pressedPoint.Y;
-				this.setLayoutX(pressedPoint.X + moveX);
-				this.setPrefWidth(pressedSize.X - moveX);
-				this.setPrefHeight(pressedSize.Y + moveY);
+				if (pressedPoint.X + moveX < 0) this.setLayoutX(0);
+				else {
+					this.setLayoutX(pressedPoint.X + moveX);
+					this.setPrefWidth(pressedSize.X - moveX);
+				}
+				if (this.getBoundsInParent().getMaxY() + event.getY() <= ((Pane) this.getParent()).getHeight())
+					this.setPrefHeight(pressedSize.Y + moveY);
+				else this.setPrefHeight(((Pane) this.getParent()).getHeight() - this.getLayoutY());
 				break;
 			case BottomAndRight:
 				moveX = this.getBoundsInParent().getMaxX() + event.getX() - pressedPoint.X;
 				moveY = this.getBoundsInParent().getMaxY() + event.getY() - pressedPoint.Y;
-				this.setPrefWidth(pressedSize.X + moveX);
-				this.setPrefHeight(pressedSize.Y + moveY);
+				if (this.getBoundsInParent().getMaxX() + event.getX() <= ((Pane) this.getParent()).getWidth())
+					this.setPrefWidth(pressedSize.X + moveX);
+				else this.setPrefWidth(((Pane) this.getParent()).getWidth() - this.getLayoutX());
+				if (this.getBoundsInParent().getMaxY() + event.getY() <= ((Pane) this.getParent()).getHeight())
+					this.setPrefHeight(pressedSize.Y + moveY);
+				else this.setPrefHeight(((Pane) this.getParent()).getHeight() - this.getLayoutY());
 				break;
 		}
 	}
