@@ -128,6 +128,8 @@ public class MainFX {
 	 * @param event 発生したイベント
 	 */
 	public void editor_Panel_MousePressed(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
+		mainGUIController.editor_Panel.getChildren().stream().filter(node -> node instanceof NodeBase).forEach(node -> ((NodeBase) node).editorPanelClickEvent(event, this.editMode));
 		editor_Panel_MousePressedPoint.setXandY(event.getX(), event.getY());
 		isDragged = false;
 		switch (this.editMode) {
@@ -199,7 +201,6 @@ public class MainFX {
 	 * @param event Mouseイベント
 	 */
 	private void createMode_EPMD(MouseEvent event) {
-		if (event.getButton() != MouseButton.PRIMARY) return;
 		double difference;
 		NodeBase selectNode = this.selectNode.get(0);
 		//X座標の計算など
@@ -257,8 +258,15 @@ public class MainFX {
 			mainGUIController.editor_Panel.getChildren().remove(selectNode.get(0));
 			return;
 		}
-		if (selectNode.get(0) != null)selectNode.get(0).unSelect();
-		
+		if (selectNode.get(0) != null) selectNode.get(0).unSelect();
+		selectNode.get(0).created();
+	}
+	
+	/**
+	 * editorパネルがなんかしらでclickされたときに処理
+	 * @param event Clickイベント
+	 */
+	public void editor_Panel_MouseClicked(MouseEvent event) {
 	}
 	
 	
@@ -313,6 +321,7 @@ public class MainFX {
 	
 	/**
 	 * 指定したノードの選択を解除します
+	 *
 	 * @param node 解除するノード
 	 */
 	private void removeSelectNode(NodeBase node) {

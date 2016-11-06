@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import raiti.revg.api.Double2DPoint;
+import raiti.revg.gui.MODE;
 
 /**
  * Created by Raiti-chan on 2016/11/05.
@@ -23,8 +24,7 @@ public abstract class NodeBase extends AnchorPane {
 	
 	protected Pane dragPoints[] = new Pane[DragPointPosition.values().length];
 	
-	protected NodeBase(Control control) {
-		nodePanel.setCenter(control);
+	protected NodeBase() {
 		setBottomAnchor(nodePanel, 1.0);
 		setTopAnchor(nodePanel, 1.0);
 		setLeftAnchor(nodePanel, 1.0);
@@ -97,6 +97,12 @@ public abstract class NodeBase extends AnchorPane {
 			pane.setVisible(false);
 		}
 	}
+	
+	/**
+	 * ノードのレイアウト座標、SIZEが決まり、固定されたときに処理されます。<br>
+	 * つまりクリエイトモードでMouseがドラッグされ離された際に処理されます。
+	 */
+	public abstract void created();
 	
 	private static final Double2DPoint pressedPoint = new Double2DPoint();
 	private static final Double2DPoint pressedSize = new Double2DPoint();
@@ -198,6 +204,15 @@ public abstract class NodeBase extends AnchorPane {
 			case BottomAndRight:
 				break;
 		}
+	}
+	
+	/**
+	 * エディターパネルがなんかしらでclickされた場合に処理されます
+	 *
+	 * @param event エディターパネルのEvent
+	 * @param mode  エディターのモード
+	 */
+	public void editorPanelClickEvent(MouseEvent event, MODE mode) {
 	}
 	
 	/**

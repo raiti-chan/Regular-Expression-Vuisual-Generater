@@ -98,6 +98,7 @@ public class MainGUIController implements Initializable{
 		this.editor_Panel.setOnMousePressed(fxs::editor_Panel_MousePressed);
 		this.editor_Panel.setOnMouseDragged(fxs::editor_Panel_MouseDragged);
 		this.editor_Panel.setOnMouseReleased(fxs::editor_Panel_MouseReleased);
+		this.editor_Panel.setOnMouseClicked(fxs::editor_Panel_MouseClicked);
 		
 		
 		
