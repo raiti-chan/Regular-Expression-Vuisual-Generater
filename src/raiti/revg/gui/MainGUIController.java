@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import raiti.revg.main.MainFX;
@@ -34,6 +35,9 @@ public class MainGUIController implements Initializable{
 	 */
 	@FXML
 	public Pane editor_Panel;
+	
+	@FXML
+	private BorderPane mainPanel;
 	
 //==メニューアイテム====================================================================================================
 	//ファイル
@@ -87,11 +91,15 @@ public class MainGUIController implements Initializable{
 		ADD.setOnAction(event -> fxs.setEditMode(MODE.CREATE_NODE));
 		SELECT.setOnAction(event -> fxs.setEditMode(MODE.SELECT_NODE));
 		
+		//==メインパネル================================================================================================
+		this.mainPanel.setOnKeyPressed(fxs::editor_Pane_KeyPressed);
+		
+		//==エディターパネル============================================================================================
 		this.editor_Panel.setOnMousePressed(fxs::editor_Panel_MousePressed);
-		
 		this.editor_Panel.setOnMouseDragged(fxs::editor_Panel_MouseDragged);
-		
 		this.editor_Panel.setOnMouseReleased(fxs::editor_Panel_MouseReleased);
+		
+		
 		
 	}
 	

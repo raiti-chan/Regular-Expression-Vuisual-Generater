@@ -2,6 +2,7 @@ package raiti.revg.gui.control;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Control;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -89,11 +90,20 @@ public abstract class NodeBase extends AnchorPane {
 		}
 	}
 	
+	public void manySelect() {
+		this.nodePanel.setStyle("-fx-border-color: #000000; -fx-border-style: dashed");
+		this.toFront();
+		for (Pane pane : dragPoints) {
+			pane.setVisible(false);
+		}
+	}
+	
 	private static final Double2DPoint pressedPoint = new Double2DPoint();
 	private static final Double2DPoint pressedSize = new Double2DPoint();
 	private static final Double2DPoint pressedLayout = new Double2DPoint();
 	
 	private void DragPointPressed(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		Pane point = (Pane) event.getSource();
 		pressedSize.setXandY(this.getWidth(), this.getHeight());
 		pressedLayout.setXandY(this.getLayoutX(), this.getLayoutY());
@@ -118,6 +128,7 @@ public abstract class NodeBase extends AnchorPane {
 	}
 	
 	private void DragPointDragged(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		Pane point = (Pane) event.getSource();
 		double moveX, moveY;
 		switch ((DragPointPosition) point.getProperties().get(POINT_POSITION_KEY)) {
@@ -175,6 +186,7 @@ public abstract class NodeBase extends AnchorPane {
 	}
 	
 	private void DragPointReleased(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		Pane point = (Pane) event.getSource();
 		switch ((DragPointPosition) point.getProperties().get(POINT_POSITION_KEY)) {
 			case TopAndLeft:

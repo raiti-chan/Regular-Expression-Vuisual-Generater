@@ -8,6 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
@@ -115,7 +118,7 @@ public class MainFX {
 	/**
 	 * 作成中のパネル
 	 */
-	private NodeBase selectNode = null;
+	private final ArrayList<NodeBase> selectNode = new ArrayList<>();
 	private boolean isDragged = false;
 	
 	/**
@@ -130,7 +133,7 @@ public class MainFX {
 			case NONE:
 				break;
 			case CREATE_NODE://新規要素作成モード
-				createMode_EPMP();
+				createMode_EPMP(event);
 				break;
 			case SELECT_NODE://選択モード
 				selectMode_EPMP(event);
@@ -139,7 +142,8 @@ public class MainFX {
 		}
 	}
 	
-	private void createMode_EPMP() {
+	private void createMode_EPMP(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		NodeBase ap = new TextNode();
 		ap.setLayoutX(editor_Panel_MousePressedPoint.X);
 		ap.setLayoutY(editor_Panel_MousePressedPoint.Y);
@@ -150,14 +154,21 @@ public class MainFX {
 	}
 	
 	private void selectMode_EPMP(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		Node node = (Node) event.getTarget();
 		while (!(node instanceof NodeBase)) {
 			if (node == mainGUIController.editor_Panel) return;
 			node = node.getParent();
 		}
-		setSelectNode((NodeBase) node);
+		if (event.isShiftDown()) {
+			if (selectNode.indexOf(node) == -1) {
+				addSelectNode((NodeBase) node);
+			} else {
+				removeSelectNode((NodeBase) node);
+			}
+			
+		} else setSelectNode((NodeBase) node);
 	}
-	
 	
 	/**
 	 * {@link MainGUIController#editor_Panel}上でドラッグされた場合に処理されます
@@ -184,7 +195,9 @@ public class MainFX {
 	 * @param event Mouseイベント
 	 */
 	private void createMode_EPMD(MouseEvent event) {
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		double difference;
+		NodeBase selectNode = this.selectNode.get(0);
 		//X座標の計算など
 		if ((difference = event.getX() - editor_Panel_MousePressedPoint.X) < 0) {
 			if (event.getX() < 0) {
@@ -233,16 +246,30 @@ public class MainFX {
 		}
 	}
 	
-	
 	@SuppressWarnings("UnusedParameters")
 	private void createMode_EPMR(MouseEvent event) {
-		
+		if (event.getButton() != MouseButton.PRIMARY) return;
 		if (!isDragged) {
-			mainGUIController.editor_Panel.getChildren().remove(selectNode);
+			mainGUIController.editor_Panel.getChildren().remove(selectNode.get(0));
 			return;
 		}
-		selectNode.unSelect();
+		selectNode.get(0).unSelect();
 		
+	}
+	
+	
+	//メインパネル==============================================================================================================
+	
+	/**
+	 * ウィンドウにフォーカスがある状態でキーが押されたときの処理
+	 *
+	 * @param event イベント
+	 */
+	public void editor_Pane_KeyPressed(KeyEvent event) {
+		if (event.getCode() == KeyCode.DELETE) {
+			mainGUIController.editor_Panel.getChildren().removeAll(selectNode);
+			selectNode.clear();
+		}
 	}
 	//==================================================================================================================
 	
@@ -252,11 +279,31 @@ public class MainFX {
 	 * @param node 選択するノード
 	 */
 	private void setSelectNode(NodeBase node) {
-		if (this.selectNode != null) this.selectNode.unSelect();
-		this.selectNode = node;
-		if (node != null) {
-			this.selectNode.onSelect();
+		if (this.selectNode.size() != 0) {
+			this.selectNode.forEach(NodeBase::unSelect);
+			this.selectNode.clear();
 		}
+		this.selectNode.add(node);
+		if (node != null) node.onSelect();
+		
+	}
+	
+	/**
+	 * 選択中ノードを追加します
+	 *
+	 * @param node 追加するノード
+	 */
+	private void addSelectNode(NodeBase node) {
+		if (this.selectNode.size() == 1) {
+			this.selectNode.get(0).manySelect();
+		}
+		if (node != null) node.manySelect();
+		this.selectNode.add(node);
+	}
+	
+	private void removeSelectNode(NodeBase node) {
+		if (node != null) node.unSelect();
+		this.selectNode.remove(node);
 	}
 	
 	
