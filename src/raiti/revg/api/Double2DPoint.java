@@ -49,4 +49,14 @@ public class Double2DPoint {
 		this.Y = y;
 	}
 	
+	/**
+	 * 座標を初期化します。
+	 */
+	@SuppressWarnings("unused")
+	public void clearPoint(){
+		this.X = 0;
+		this.Y = 0;
+	}
+	
+	
 }

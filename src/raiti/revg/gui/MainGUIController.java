@@ -57,6 +57,8 @@ public class MainGUIController implements Initializable{
 //==ツールバー==========================================================================================================
 	@FXML
 	private Button ADD;
+	@FXML
+	private Button SELECT;
 	
 	
 	/**
@@ -83,6 +85,7 @@ public class MainGUIController implements Initializable{
 		
 		//==ツールバー==================================================================================================
 		ADD.setOnAction(event -> fxs.setEditMode(MODE.CREATE_NODE));
+		SELECT.setOnAction(event -> fxs.setEditMode(MODE.SELECT_NODE));
 		
 		this.editor_Panel.setOnMousePressed(fxs::editor_Panel_MousePressed);
 		

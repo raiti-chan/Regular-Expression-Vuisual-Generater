@@ -8,10 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,6 +17,8 @@ import raiti.revg.api.Double2DPoint;
 import raiti.revg.gui.Dialog.SizeSetDialogController;
 import raiti.revg.gui.MODE;
 import raiti.revg.gui.MainGUIController;
+import raiti.revg.gui.control.NodeBase;
+import raiti.revg.gui.control.TextNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class MainFX {
 	/**
 	 * GUIのコントローラー(FXNodeの参照用)
 	 */
-	private MainGUIController mainGUIController;
+	private static MainGUIController mainGUIController;
 	
 	/**
 	 * コンストラクタ
@@ -52,7 +51,8 @@ public class MainFX {
 	 * @param controller FXNodeの参照インスタンス
 	 */
 	public MainFX(MainGUIController controller) {
-		this.mainGUIController = controller;
+		mainGUIController = controller;
+		//テキスト入力フィールドの初期化
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class MainFX {
 	public void EditPanelResize(ActionEvent event) {
 		try {
 			//FXMLのロード
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("raiti/revg/gui/Dialog/SizeSetDialog.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../gui/mainGUI.fxml"));
 			Parent root = loader.load();
 			SizeSetDialogController controller = loader.getController();
 			controller.setXandY((int) mainGUIController.editor_Panel.getWidth(), (int) mainGUIController.editor_Panel.getHeight());
@@ -115,7 +115,7 @@ public class MainFX {
 	/**
 	 * 作成中のパネル
 	 */
-	private BorderPane createPanel = null;
+	private NodeBase selectNode = null;
 	private boolean isDragged = false;
 	
 	/**
@@ -132,17 +132,33 @@ public class MainFX {
 			case CREATE_NODE://新規要素作成モード
 				createMode_EPMP();
 				break;
+			case SELECT_NODE://選択モード
+				selectMode_EPMP(event);
+				break;
+			
 		}
 	}
 	
 	private void createMode_EPMP() {
-		BorderPane ap = new BorderPane();
+		NodeBase ap = new TextNode();
 		ap.setLayoutX(editor_Panel_MousePressedPoint.X);
 		ap.setLayoutY(editor_Panel_MousePressedPoint.Y);
-		ap.setStyle("-fx-border-color: #000000; -fx-border-style: dashed");
 		mainGUIController.editor_Panel.getChildren().add(ap);
-		createPanel = ap;
+		setSelectNode(ap);
+		ap.creating();
+		
 	}
+	
+	private void selectMode_EPMP(MouseEvent event) {
+		Node node = (Node) event.getTarget();
+		while (!(node instanceof NodeBase)) {
+			if (node == mainGUIController.editor_Panel) return;
+			node = node.getParent();
+		}
+		setSelectNode((NodeBase) node);
+	}
+	
+
 	
 	/**
 	 * {@link MainGUIController#editor_Panel}上でドラッグされた場合に処理されます
@@ -157,6 +173,8 @@ public class MainFX {
 			case CREATE_NODE://新規作成モード
 				createMode_EPMD(event);
 				break;
+			case SELECT_NODE://選択モード
+				break;
 		}
 		
 	}
@@ -165,24 +183,24 @@ public class MainFX {
 		double difference;
 		//X座標の計算など
 		if ((difference = event.getX() - editor_Panel_MousePressedPoint.X) < 0) {
-			createPanel.setLayoutX(event.getX());
-			createPanel.setPrefWidth(-difference);
+			selectNode.setLayoutX(event.getX());
+			selectNode.setPrefWidth(-difference);
 		} else if (event.getX() <= mainGUIController.editor_Panel.getWidth()) {
-			createPanel.setLayoutX(editor_Panel_MousePressedPoint.X);
-			createPanel.setPrefWidth(difference);
+			selectNode.setLayoutX(editor_Panel_MousePressedPoint.X);
+			selectNode.setPrefWidth(difference);
 		} else {
-			createPanel.setPrefWidth(mainGUIController.editor_Panel.getWidth() - createPanel.getLayoutX());
+			selectNode.setPrefWidth(mainGUIController.editor_Panel.getWidth() - selectNode.getLayoutX());
 		}
 		
 		//Y座標の計算
 		if ((difference = event.getY() - editor_Panel_MousePressedPoint.Y) < 0) {
-			createPanel.setLayoutY(event.getY());
-			createPanel.setPrefHeight(-difference);
+			selectNode.setLayoutY(event.getY());
+			selectNode.setPrefHeight(-difference);
 		} else if (event.getY() <= mainGUIController.editor_Panel.getHeight()) {
-			createPanel.setLayoutY(editor_Panel_MousePressedPoint.Y);
-			createPanel.setPrefHeight(difference);
+			selectNode.setLayoutY(editor_Panel_MousePressedPoint.Y);
+			selectNode.setPrefHeight(difference);
 		} else {
-			createPanel.setPrefHeight(mainGUIController.editor_Panel.getHeight() - createPanel.getLayoutY());
+			selectNode.setPrefHeight(mainGUIController.editor_Panel.getHeight() - selectNode.getLayoutY());
 		}
 	}
 	
@@ -196,30 +214,38 @@ public class MainFX {
 		switch (this.editMode) {
 			case NONE:
 				break;
-			case CREATE_NODE:
+			case CREATE_NODE://新規作成モード
 				createMode_EPMR(event);
 				break;
+			case SELECT_NODE://選択モード
 		}
 	}
 	
 	
 	@SuppressWarnings("UnusedParameters")
 	private void createMode_EPMR(MouseEvent event) {
-		if (!isDragged){
-			mainGUIController.editor_Panel.getChildren().removeAll(createPanel);
+		
+		if (!isDragged) {
+			mainGUIController.editor_Panel.getChildren().removeAll(selectNode);
 			return;
 		}
+		selectNode.unSelect();
 		
-		TextField field = new TextField();
-		field.setOnAction(event1 -> {
-			TextField eField = (TextField) event1.getSource();
-			BorderPane borderPane = (BorderPane)eField.getParent();
-			borderPane.setCenter(new Label(eField.getText()));
-		});
-		field.setStyle("-fx-alignment: center;");
-		this.createPanel.setCenter(field);
-		createPanel = null;
 	}
 	//==================================================================================================================
+	
+	/**
+	 * 選択ノードを設定します
+	 *
+	 * @param node 選択するノード
+	 */
+	private void setSelectNode(NodeBase node) {
+		if (this.selectNode != null) this.selectNode.unSelect();
+		this.selectNode = node;
+		if (node != null) {
+			this.selectNode.onSelect();
+		}
+	}
+	
 	
 }

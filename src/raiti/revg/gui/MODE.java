@@ -9,6 +9,7 @@ public enum MODE {
 	
 	NONE,
 	CREATE_NODE,
+	SELECT_NODE,
 	;
 	
 }
