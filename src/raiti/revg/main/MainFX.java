@@ -40,6 +40,7 @@ public class MainFX {
 	private MODE editMode = MODE.NONE;
 	
 	public void setEditMode(MODE editMode) {
+		this.setSelectNode(null);
 		this.editMode = editMode;
 	}
 	
@@ -157,10 +158,13 @@ public class MainFX {
 		if (event.getButton() != MouseButton.PRIMARY) return;
 		Node node = (Node) event.getTarget();
 		while (!(node instanceof NodeBase)) {
-			if (node == mainGUIController.editor_Panel) return;
+			if (node == mainGUIController.editor_Panel) {
+				setSelectNode(null);
+				return;
+			}
 			node = node.getParent();
 		}
-		if (event.isShiftDown()) {
+		if (event.isShiftDown() && selectNode.size() > 0) {
 			if (selectNode.indexOf(node) == -1) {
 				addSelectNode((NodeBase) node);
 			} else {
@@ -253,7 +257,7 @@ public class MainFX {
 			mainGUIController.editor_Panel.getChildren().remove(selectNode.get(0));
 			return;
 		}
-		selectNode.get(0).unSelect();
+		if (selectNode.get(0) != null)selectNode.get(0).unSelect();
 		
 	}
 	
@@ -280,11 +284,17 @@ public class MainFX {
 	 */
 	private void setSelectNode(NodeBase node) {
 		if (this.selectNode.size() != 0) {
-			this.selectNode.forEach(NodeBase::unSelect);
+			this.selectNode.forEach(nodeBase -> {
+				if (nodeBase != null) nodeBase.unSelect();
+			});
 			this.selectNode.clear();
 		}
-		this.selectNode.add(node);
-		if (node != null) node.onSelect();
+		
+		if (node != null) {
+			this.selectNode.add(node);
+			node.onSelect();
+		}
+		
 		
 	}
 	
@@ -295,15 +305,22 @@ public class MainFX {
 	 */
 	private void addSelectNode(NodeBase node) {
 		if (this.selectNode.size() == 1) {
-			this.selectNode.get(0).manySelect();
+			if (selectNode.get(0) != null) this.selectNode.get(0).manySelect();
 		}
 		if (node != null) node.manySelect();
 		this.selectNode.add(node);
 	}
 	
+	/**
+	 * 指定したノードの選択を解除します
+	 * @param node 解除するノード
+	 */
 	private void removeSelectNode(NodeBase node) {
 		if (node != null) node.unSelect();
 		this.selectNode.remove(node);
+		if (this.selectNode.size() == 1) {
+			selectNode.get(0).onSelect();
+		}
 	}
 	
 	
